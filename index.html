@@ -3,28 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Website File Explorer - Dark Mode</title>
+    <title>Website File Explorer</title>
     <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --bg-glass: rgba(33, 38, 45, 0.85);
-            --border-color: #30363d;
-            --text-primary: #f0f6fc;
-            --text-secondary: #8b949e;
-            --text-muted: #656d76;
-            --accent-primary: #58a6ff;
-            --accent-secondary: #bd561d;
-            --success: #238636;
-            --warning: #d29922;
-            --error: #da3633;
-            --purple: #8957e5;
-            --cyan: #76e3ea;
-            --green: #7ce38b;
-            --pink: #db6d28;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -32,190 +12,69 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, #1c2128 50%, var(--bg-secondary) 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: var(--text-primary);
-            overflow-x: hidden;
-        }
-
-        /* Animated background particles */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(137, 87, 229, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(118, 227, 234, 0.05) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
+            color: #333;
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
-            z-index: 1;
         }
 
         .header {
             text-align: center;
             margin-bottom: 30px;
-            color: var(--text-primary);
+            color: white;
         }
 
         .header h1 {
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--purple), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { filter: brightness(1) drop-shadow(0 0 20px rgba(88, 166, 255, 0.4)); }
-            to { filter: brightness(1.2) drop-shadow(0 0 40px rgba(88, 166, 255, 0.8)); }
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
+            font-size: 2.5em;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .input-section {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.95);
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(88, 166, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .input-section:hover {
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(88, 166, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .input-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            align-items: center;
+            backdrop-filter: blur(10px);
         }
 
         .url-input {
-            flex: 1;
-            padding: 16px 20px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
+            width: 100%;
+            padding: 15px;
             font-size: 16px;
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            outline: none;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
         }
 
         .url-input:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2), 0 0 20px rgba(88, 166, 255, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .url-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .scan-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .option-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: var(--bg-tertiary);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .option-group:hover {
-            background: var(--bg-secondary);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        .option-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--accent-primary);
-            cursor: pointer;
-        }
-
-        .option-group label {
-            font-size: 14px;
-            font-weight: 500;
-            user-select: none;
-            cursor: pointer;
-            color: var(--text-primary);
+            outline: none;
+            border-color: #667eea;
         }
 
         .scan-btn {
-            background: linear-gradient(135deg, var(--accent-primary), var(--purple));
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
+            padding: 15px 30px;
             border: none;
-            padding: 18px 40px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
             width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .scan-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .scan-btn:hover::before {
-            left: 100%;
         }
 
         .scan-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(88, 166, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .scan-btn:disabled {
@@ -224,1940 +83,529 @@
             transform: none;
         }
 
-        .progress-section {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
+        .results {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             overflow: hidden;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), var(--purple), var(--cyan));
-            width: 0%;
-            transition: width 0.4s ease;
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .progress-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .results-section {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 25px;
-            height: 75vh;
-            min-height: 600px;
-        }
-
-        .file-tree, .file-content {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-            overflow: hidden;
-        }
-
-        .file-tree {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tree-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--bg-secondary);
-        }
-
-        .tree-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .tree-stats {
-            font-size: 12px;
-            color: var(--text-muted);
-            background: var(--bg-tertiary);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        .search-box {
-            margin: 20px;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 14px;
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
-        }
-
-        .search-box::placeholder {
-            color: var(--text-muted);
-        }
-
-        .file-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0 20px 20px;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            margin: 3px 0;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 3px;
-            background: var(--accent-primary);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .file-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        .file-item:hover {
-            background: var(--bg-secondary);
-            border-color: var(--accent-primary);
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .file-item.folder {
-            border-left: 3px solid var(--warning);
-        }
-
-        .file-item.folder::before {
-            background: var(--warning);
-        }
-
-        .file-item.selected {
-            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(137, 87, 229, 0.2));
-            border-color: var(--accent-primary);
-            color: var(--text-primary);
-            box-shadow: 0 5px 20px rgba(88, 166, 255, 0.3);
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-        }
-
-        .file-icon {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .file-name {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 13px;
-            color: var(--text-primary);
-        }
-
-        .file-actions {
-            display: flex;
-            gap: 6px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .file-item:hover .file-actions {
-            opacity: 1;
-        }
-
-        .file-actions a {
-            font-size: 10px;
-            color: var(--accent-primary);
-            text-decoration: none;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: rgba(88, 166, 255, 0.1);
-            border: 1px solid rgba(88, 166, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .file-actions a:hover {
-            background: rgba(88, 166, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        .file-content {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--bg-secondary);
-        }
-
-        .content-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .content-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .content-actions button {
-            padding: 8px 16px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .content-actions button:hover {
-            background: var(--bg-secondary);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        .welcome-message {
-            padding: 40px;
-            text-align: center;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .welcome-message h4 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .welcome-message p {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .welcome-message ul {
-            text-align: left;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .welcome-message li {
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .code-container {
-            flex: 1;
-            background: #0d1117;
-            border-radius: 0 0 20px 20px;
-            overflow: hidden;
-            position: relative;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .code-header {
-            background: var(--bg-tertiary);
-            padding: 12px 20px;
-            font-size: 12px;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .code-content {
-            display: flex;
-            height: calc(100% - 45px);
-            overflow: auto;
-        }
-
-        .line-numbers {
-            background: #010409;
-            color: #6e7681;
-            padding: 20px 15px;
-            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-            font-size: 12px;
-            line-height: 1.45;
-            user-select: none;
-            border-right: 1px solid var(--border-color);
-            min-width: 60px;
-            text-align: right;
-            white-space: pre;
-        }
-
-        .file-code {
-            color: #f0f6fc;
-            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-            font-size: 12px;
-            line-height: 1.45;
-            white-space: pre;
-            padding: 20px;
-            flex: 1;
-            overflow-x: auto;
-            background: #0d1117;
-        }
-
-        /* Syntax highlighting */
-        .syntax-keyword { color: #ff7b72; }
-        .syntax-string { color: #a5d6ff; }
-        .syntax-comment { color: #8b949e; font-style: italic; }
-        .syntax-function { color: #d2a8ff; }
-        .syntax-number { color: #79c0ff; }
-        .syntax-tag { color: #7ee787; }
-        .syntax-attribute { color: #79c0ff; }
-
-        .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin: 15px 0;
-            border-left: 4px solid;
             backdrop-filter: blur(10px);
         }
 
-        .error {
-            background: rgba(218, 54, 51, 0.1);
-            border-left-color: var(--error);
-            color: #ffa198;
+        .results-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
         }
 
-        .warning {
-            background: rgba(210, 153, 34, 0.1);
-            border-left-color: var(--warning);
-            color: #f0d67a;
+        .file-tree {
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
         }
 
-        .info {
-            background: rgba(88, 166, 255, 0.1);
-            border-left-color: var(--accent-primary);
-            color: #79c0ff;
+        .file-item, .folder-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
         }
 
-        .success {
-            background: rgba(35, 134, 54, 0.1);
-            border-left-color: var(--success);
-            color: #7ee787;
+        .file-item:hover, .folder-item:hover {
+            background-color: #f0f2ff;
         }
 
-        .hidden {
-            display: none !important;
+        .file-item {
+            background-color: #f8f9ff;
+            border-left: 4px solid #667eea;
         }
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .folder-item {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffa726;
+            font-weight: bold;
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-            border-radius: 4px;
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
-
-        /* Responsive design */
-        @media (max-width: 1200px) {
-            .results-section {
-                grid-template-columns: 350px 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .results-section {
-                grid-template-columns: 1fr;
-                height: auto;
-            }
-            
-            .scan-options {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-        }
-
-        /* Loading animation */
-        .loading-dots {
-            display: inline-block;
-        }
-
-        .loading-dots::after {
-            content: '';
-            animation: dots 2s infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-        }
-
-        /* Tooltip styles */
-        .tooltip {
-            position: relative;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            padding: 8px 12px;
+        .file-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
             border-radius: 8px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            border: 1px solid var(--border-color);
-            z-index: 1000;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
         }
 
-        .tooltip:hover::after {
-            opacity: 1;
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #c62828;
+        }
+
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            background: #e3f2fd;
+            color: #1565c0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .file-path {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Advanced Website Explorer</h1>
-            <p>Professional-grade file discovery and analysis tool</p>
-            <div style="font-size: 14px; color: var(--text-muted); margin-top: 10px;">
-                Powered by advanced reconnaissance techniques • Dark Mode UI
-            </div>
+            <h1>🔍 Website File Explorer</h1>
+            <p>Discover and explore website file structures by URL</p>
         </div>
 
         <div class="input-section">
-            <div class="input-row">
-                <input type="url" class="url-input" id="urlInput" placeholder="🌐 Enter target URL (e.g., https://example.com)" />
-            </div>
-            
-            <div class="scan-options">
-                <div class="option-group tooltip" data-tooltip="Comprehensive file and directory scanning">
-                    <input type="checkbox" id="deepScan" checked>
-                    <label for="deepScan">🔍 Deep Scan</label>
-                </div>
-                <div class="option-group tooltip" data-tooltip="Recursively scan subdirectories">
-                    <input type="checkbox" id="checkSubdirs" checked>
-                    <label for="checkSubdirs">📁 Subdirectories</label>
-                </div>
-                <div class="option-group tooltip" data-tooltip="Search for backup files and versions">
-                    <input type="checkbox" id="findBackups" checked>
-                    <label for="findBackups">💾 Find Backups</label>
-                </div>
-                <div class="option-group tooltip" data-tooltip="Look for compressed archives">
-                    <input type="checkbox" id="scanArchives" checked>
-                    <label for="scanArchives">📦 Scan Archives</label>
-                </div>
-                <div class="option-group tooltip" data-tooltip="Enhanced scanning with sensitive file detection">
-                    <input type="checkbox" id="aggressiveMode">
-                    <label for="aggressiveMode">⚡ Aggressive Mode</label>
-                </div>
-                <div class="option-group tooltip" data-tooltip="Parse JavaScript files for endpoints">
-                    <input type="checkbox" id="jsAnalysis" checked>
-                    <label for="jsAnalysis">🔧 JS Analysis</label>
-                </div>
-            </div>
-            
-            <button class="scan-btn" id="scanBtn">
-                <span id="scanBtnText">🚀 Start Advanced Scan</span>
-            </button>
-            
-            <div class="warning">
-                <strong>⚠️ Ethical Use Only:</strong> This tool discovers publicly accessible files only. Ensure you have permission to scan the target website.
-            </div>
+            <input type="url" class="url-input" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)" />
+            <button class="scan-btn" id="scanBtn" onclick="scanWebsite()">🚀 Explore Website</button>
         </div>
 
-        <div class="progress-section" id="progressSection">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+        <div class="results" id="results" style="display: none;">
+            <div class="results-header">
+                <span id="resultsTitle">Discovered Files & Folders</span>
             </div>
-            <div class="progress-text" id="progressText">Initializing scan<span class="loading-dots"></span></div>
-        </div>
-
-        <div class="results-section hidden" id="resultsSection">
-            <div class="file-tree">
-                <div class="tree-header">
-                    <h3>📂 Discovered Assets</h3>
-                    <div class="tree-stats" id="treeStats">0 files found</div>
-                </div>
-                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Filter files and directories...">
-                <div class="file-list" id="fileList"></div>
-            </div>
-
-            <div class="file-content">
-                <div class="content-header">
-                    <div class="content-title" id="contentTitle">Select a file to view its contents</div>
-                    <div class="content-actions">
-                        <button id="downloadBtn" class="tooltip" data-tooltip="Download file" style="display: none;">📥</button>
-                        <button id="copyBtn" class="tooltip" data-tooltip="Copy to clipboard" style="display: none;">📋</button>
-                        <button id="openBtn" class="tooltip" data-tooltip="Open in new tab" style="display: none;">🔗</button>
-                        <button id="analyzeBtn" class="tooltip" data-tooltip="Analyze file structure" style="display: none;">🔬</button>
-                    </div>
-                </div>
-                
-                <div class="welcome-message" id="welcomeMessage">
-                    <h4>🎯 Ready to Explore</h4>
-                    <p>Enter a target URL above and configure your scan options. This advanced tool will:</p>
-                    <ul>
-                        <li>🔍 <strong>Discover Files:</strong> Find hidden files using multiple techniques</li>
-                        <li>📁 <strong>Map Structure:</strong> Reveal directory hierarchies and file organization</li>
-                        <li>🔧 <strong>Analyze Code:</strong> Parse JavaScript for API endpoints and secrets</li>
-                        <li>💾 <strong>Find Backups:</strong> Locate backup files and version history</li>
-                        <li>📊 <strong>Generate Reports:</strong> Export findings in multiple formats</li>
-                        <li>🛡️ <strong>Security Focus:</strong> Identify potentially sensitive exposures</li>
-                    </ul>
-                    <div style="margin-top: 30px; padding: 20px; background: var(--bg-tertiary); border-radius: 12px; border: 1px solid var(--border-color);">
-                        <h5 style="color: var(--accent-primary); margin-bottom: 10px;">🏆 Pro Tips:</h5>
-                        <p style="font-size: 13px; line-height: 1.5;">
-                            • Use <strong>Deep Scan</strong> for comprehensive discovery<br>
-                            • Enable <strong>Aggressive Mode</strong> for sensitive file detection<br>
-                            • <strong>JS Analysis</strong> reveals hidden API endpoints<br>
-                            • Results are filtered and organized automatically
-                        </p>
-                    </div>
-                </div>
-
-                <div class="code-container hidden" id="codeContainer">
-                    <div class="code-header">
-                        <div>
-                            <span id="fileType">Text File</span>
-                            <span style="margin-left: 15px; color: var(--text-muted);" id="fileSize">0 bytes</span>
-                        </div>
-                        <div>
-                            <span id="encoding">UTF-8</span>
-                            <span style="margin-left: 15px;" id="lineCount">0 lines</span>
-                        </div>
-                    </div>
-                    <div class="code-content">
-                        <div class="line-numbers" id="lineNumbers"></div>
-                        <div class="file-code" id="fileCode"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="file-tree" id="fileTree"></div>
         </div>
     </div>
 
     <script>
-        class AdvancedWebsiteExplorer {
-            constructor() {
-                this.baseUrl = '';
-                this.discoveredFiles = new Map();
-                this.discoveredFolders = new Set();
-                this.scanProgress = 0;
-                this.totalScans = 0;
-                this.currentFile = null;
-                this.scanOptions = {};
-                this.jsEndpoints = new Set();
-                this.sensitiveFiles = new Set();
-                
-                this.initEventListeners();
-                this.loadSavedSettings();
-            }
-
-            initEventListeners() {
-                document.getElementById('scanBtn').addEventListener('click', () => this.startScan());
-                document.getElementById('urlInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.startScan();
-                });
-                document.getElementById('searchBox').addEventListener('input', (e) => this.filterFiles(e.target.value));
-                document.getElementById('copyBtn').addEventListener('click', () => this.copyContent());
-                document.getElementById('downloadBtn').addEventListener('click', () => this.downloadFile());
-                document.getElementById('openBtn').addEventListener('click', () => this.openInNewTab());
-                document.getElementById('analyzeBtn').addEventListener('click', () => this.analyzeFile());
-                
-                // Save settings when changed
-                ['deepScan', 'checkSubdirs', 'findBackups', 'scanArchives', 'aggressiveMode', 'jsAnalysis'].forEach(id => {
-                    document.getElementById(id).addEventListener('change', () => this.saveSettings());
-                });
-            }
-
-            loadSavedSettings() {
-                const saved = localStorage.getItem('websiteExplorerSettings');
-                if (saved) {
-                    try {
-                        const settings = JSON.parse(saved);
-                        Object.keys(settings).forEach(key => {
-                            const element = document.getElementById(key);
-                            if (element) element.checked = settings[key];
-                        });
-                    } catch (e) {}
-                }
-            }
-
-            saveSettings() {
-                const settings = {};
-                ['deepScan', 'checkSubdirs', 'findBackups', 'scanArchives', 'aggressiveMode', 'jsAnalysis'].forEach(id => {
-                    settings[id] = document.getElementById(id).checked;
-                });
-                localStorage.setItem('websiteExplorerSettings', JSON.stringify(settings));
-            }
-
-            async startScan() {
-                const urlInput = document.getElementById('urlInput');
-                const url = urlInput.value.trim();
-                
-                if (!url) {
-                    this.showAlert('Please enter a valid URL', 'warning');
-                    return;
-                }
-
-                if (!this.isValidUrl(url)) {
-                    this.showAlert('Please enter a valid HTTP/HTTPS URL', 'error');
-                    return;
-                }
-
-                this.baseUrl = url.replace(/\/+$/, '');
-                this.getScanOptions();
-                this.resetResults();
-                this.showProgress();
-
-                try {
-                    await this.performAdvancedScan();
-                    this.displayResults();
-                    this.showAlert(`Scan completed! Found ${this.discoveredFiles.size} files and ${this.discoveredFolders.size} directories`, 'success');
-                } catch (error) {
-                    this.showAlert(`Scan failed: ${error.message}`, 'error');
-                } finally {
-                    this.hideProgress();
-                }
-            }
-
-            isValidUrl(string) {
-                try {
-                    const url = new URL(string);
-                    return url.protocol === 'http:' || url.protocol === 'https:';
-                } catch (_) {
-                    return false;
-                }
-            }
-
-            getScanOptions() {
-                this.scanOptions = {
-                    deepScan: document.getElementById('deepScan').checked,
-                    checkSubdirs: document.getElementById('checkSubdirs').checked,
-                    findBackups: document.getElementById('findBackups').checked,
-                    scanArchives: document.getElementById('scanArchives').checked,
-                    aggressiveMode: document.getElementById('aggressiveMode').checked,
-                    jsAnalysis: document.getElementById('jsAnalysis').checked
-                };
-            }
-
-            resetResults() {
-                this.discoveredFiles.clear();
-                this.discoveredFolders.clear();
-                this.jsEndpoints.clear();
-                this.sensitiveFiles.clear();
-                this.scanProgress = 0;
-                this.currentFile = null;
-                document.getElementById('resultsSection').classList.add('hidden');
-                document.getElementById('welcomeMessage').classList.remove('hidden');
-                document.getElementById('codeContainer').classList.add('hidden');
-                this.clearAlerts();
-            }
-
-            showProgress() {
-                document.getElementById('progressSection').style.display = 'block';
-                document.getElementById('scanBtn').disabled = true;
-                document.getElementById('scanBtnText').innerHTML = '⏳ Scanning...';
-            }
-
-            hideProgress() {
-                document.getElementById('progressSection').style.display = 'none';
-                document.getElementById('scanBtn').disabled = false;
-                document.getElementById('scanBtnText').innerHTML = '🚀 Start Advanced Scan';
-            }
-
-            updateProgress(current, total, status) {
-                const percent = Math.round((current / total) * 100);
-                document.getElementById('progressFill').style.width = `${percent}%`;
-                document.getElementById('progressText').innerHTML = `${status} <span class="loading-dots"></span>`;
-            }
-
-            async performAdvancedScan() {
-                const scanTasks = [];
-                
-                // Core discovery methods
-                scanTasks.push(() => this.scanCommonFiles());
-                scanTasks.push(() => this.scanCommonDirectories());
-                scanTasks.push(() => this.parseRobotsTxt());
-                scanTasks.push(() => this.parseSitemaps());
-                scanTasks.push(() => this.checkDirectoryListings());
-                
-                if (this.scanOptions.deepScan) {
-                    scanTasks.push(() => this.deepScanExtensions());
-                    scanTasks.push(() => this.scanFrameworkFiles());
-                    scanTasks.push(() => this.scanConfigFiles());
-                }
-                
-                if (this.scanOptions.findBackups) {
-                    scanTasks.push(() => this.scanBackupFiles());
-                    scanTasks.push(() => this.scanVersionFiles());
-                }
-                
-                if (this.scanOptions.scanArchives) {
-                    scanTasks.push(() => this.scanArchiveFiles());
-                }
-                
-                if (this.scanOptions.aggressiveMode) {
-                    scanTasks.push(() => this.aggressiveScan());
-                    scanTasks.push(() => this.scanSensitiveFiles());
-                }
-
-                if (this.scanOptions.jsAnalysis) {
-                    scanTasks.push(() => this.analyzeJavaScriptFiles());
-                }
-
-                this.totalScans = scanTasks.length;
-                
-                for (let i = 0; i < scanTasks.length; i++) {
-                    this.updateProgress(i + 1, this.totalScans, `Phase ${i + 1}/${this.totalScans}`);
-                    await scanTasks[i]();
-                    await this.delay(200); // Smoother progress display
-                }
-            }
-
-            async scanCommonFiles() {
-                const commonFiles = [
-                    // Web essentials
-                    'robots.txt', 'sitemap.xml', 'sitemap.json', 'humans.txt', 'security.txt',
-                    
-                    // Index files
-                    'index.html', 'index.htm', 'index.php', 'index.jsp', 'index.asp', 'index.py',
-                    'home.html', 'main.html', 'default.html', 'welcome.html',
-                    
-                    // Stylesheets
-                    'style.css', 'styles.css', 'main.css', 'app.css', 'theme.css', 'bootstrap.css',
-                    
-                    // JavaScript files
-                    'script.js', 'scripts.js', 'main.js', 'app.js', 'jquery.js', 'bootstrap.js',
-                    
-                    // Configuration files
-                    'config.json', 'package.json', 'composer.json', 'bower.json', 'yarn.lock',
-                    
-                    // Documentation
-                    'README.md', 'README.txt', 'LICENSE', 'CHANGELOG.md', 'CONTRIBUTING.md',
-                    
-                    // Server configs
-                    '.htaccess', 'web.config', 'nginx.conf', '.htpasswd',
-                    
-                    // Assets
-                    'favicon.ico', 'apple-touch-icon.png', 'manifest.json', 'browserconfig.xml',
-                    
-                    // Service workers
-                    'sw.js', 'service-worker.js', 'offline.html', 'workbox-sw.js'
-                ];
-
-                await this.scanFileList(commonFiles, 'common');
-            }
-
-            async scanCommonDirectories() {
-                const commonDirs = [
-                    // Assets
-                    'css', 'js', 'javascript', 'scripts', 'styles', 'assets', 'static', 'public',
-                    'images', 'img', 'pictures', 'photos', 'media', 'uploads', 'files',
-                    
-                    // Admin areas
-                    'admin', 'administrator', 'panel', 'dashboard', 'cp', 'controlpanel',
-                    'manage', 'management', 'backend', 'cms',
-                    
-                    // API endpoints
-                    'api', 'rest', 'graphql', 'webhooks', 'services', 'endpoints',
-                    
-                    // Common frameworks
-                    'wp-content', 'wp-admin', 'wp-includes', 'wordpress',
-                    'drupal', 'joomla', 'magento', 'prestashop',
-                    
-                    // Development
-                    'src', 'source', 'app', 'application', 'modules', 'components',
-                    'includes', 'inc', 'lib', 'libs', 'libraries', 'vendor',
-                    
-                    // Build/Deploy
-                    'dist', 'build', 'production', 'release', 'deploy',
-                    'node_modules', 'bower_components', 'packages',
-                    
-                    // Content
-                    'content', 'data', 'cache', 'temp', 'tmp', 'logs',
-                    'backup', 'backups', 'old', 'archive', 'storage',
-                    
-                    // Documentation
-                    'docs', 'documentation', 'help', 'manual', 'guide',
-                    
-                    // Testing
-                    'test', 'tests', 'testing', 'spec', 'specs', 'qa'
-                ];
-
-                for (const dir of commonDirs) {
-                    await this.checkDirectory(dir);
-                    if (this.scanOptions.checkSubdirs) {
-                        await this.scanSubdirectories(dir);
-                    }
-                }
-            }
-
-            async scanSubdirectories(baseDir) {
-                const subdirs = ['admin', 'api', 'css', 'js', 'images', 'includes', 'assets'];
-                for (const subdir of subdirs) {
-                    await this.checkDirectory(`${baseDir}/${subdir}`);
-                }
-            }
-
-            async scanFrameworkFiles() {
-                const frameworkFiles = [
-                    // WordPress
-                    'wp-config.php', 'wp-load.php', 'wp-blog-header.php', 'xmlrpc.php',
-                    
-                    // Laravel
-                    'artisan', '.env', '.env.example', 'composer.lock', 'server.php',
-                    
-                    // Symfony
-                    'app.php', 'app_dev.php', 'console',
-                    
-                    // CodeIgniter
-                    'index.php', 'system/index.html',
-                    
-                    // Drupal
-                    'install.php', 'update.php', 'cron.php', 'authorize.php',
-                    
-                    // Joomla
-                    'configuration.php', 'htaccess.txt', 'web.config.txt'
-                ];
-
-                await this.scanFileList(frameworkFiles, 'framework');
-            }
-
-            async scanConfigFiles() {
-                const configFiles = [
-                    '.env', '.env.local', '.env.production', '.env.development',
-                    'config.php', 'configuration.php', 'settings.php', 'database.php',
-                    'config.json', 'settings.json', 'app.config', 'web.config',
-                    'config.ini', 'settings.ini', 'app.ini'
-                ];
-
-                await this.scanFileList(configFiles, 'config');
-            }
-
-            async scanBackupFiles() {
-                // First, get list of discovered files to create backup variations
-                const existingFiles = Array.from(this.discoveredFiles.keys());
-                const backupSuffixes = ['.bak', '.backup', '.old', '.orig', '.copy', '.temp', '.tmp', '~'];
-                const backupPrefixes = ['backup_', 'old_', 'copy_of_', 'temp_'];
-
-                for (const file of existingFiles) {
-                    for (const suffix of backupSuffixes) {
-                        await this.checkFile(`${file}${suffix}`, 'backup');
-                    }
-                    
-                    for (const prefix of backupPrefixes) {
-                        const fileName = file.split('/').pop();
-                        const filePath = file.substring(0, file.lastIndexOf('/'));
-                        const newPath = filePath ? `${filePath}/${prefix}${fileName}` : `${prefix}${fileName}`;
-                        await this.checkFile(newPath, 'backup');
-                    }
-                }
-            }
-
-            async scanVersionFiles() {
-                const versionFiles = [
-                    'VERSION', 'version.txt', 'version.json', 'version.php',
-                    'CHANGELOG', 'CHANGELOG.md', 'CHANGELOG.txt',
-                    'HISTORY', 'HISTORY.md', 'HISTORY.txt'
-                ];
-
-                await this.scanFileList(versionFiles, 'version');
-            }
-
-            async scanArchiveFiles() {
-                const archiveFiles = [
-                    // Common archives
-                    'backup.zip', 'backup.tar.gz', 'backup.tar', 'backup.rar',
-                    'site.zip', 'website.zip', 'www.zip', 'public_html.zip',
-                    'files.zip', 'assets.zip', 'images.zip', 'uploads.zip',
-                    'source.zip', 'src.zip', 'code.zip', 'project.zip',
-                    'archive.zip', 'old.zip', 'temp.zip', 'export.zip',
-                    
-                    // Database dumps
-                    'database.sql', 'db.sql', 'dump.sql', 'backup.sql',
-                    'database.zip', 'db.zip', 'mysql.zip'
-                ];
-
-                await this.scanFileList(archiveFiles, 'archive');
-            }
-
-            async scanSensitiveFiles() {
-                const sensitiveFiles = [
-                    // Environment files
-                    '.env', '.env.local', '.env.production', '.env.staging',
-                    
-                    // Database files
-                    'database.sqlite', 'database.db', 'app.db', 'data.db',
-                    
-                    // Configuration files with potential secrets
-                    'wp-config.php', 'config.inc.php', 'settings.inc.php',
-                    
-                    // Log files
-                    'error.log', 'access.log', 'debug.log', 'system.log',
-                    'php_errors.log', 'error_log', 'errors.txt',
-                    
-                    // Backup files
-                    'database.sql', 'dump.sql', 'backup.sql',
-                    
-                    // Development files
-                    'phpinfo.php', 'info.php', 'test.php', 'debug.php'
-                ];
-
-                for (const file of sensitiveFiles) {
-                    if (await this.checkFile(file, 'sensitive')) {
-                        this.sensitiveFiles.add(file);
-                    }
-                }
-            }
-
-            async aggressiveScan() {
-                // This performs more intensive scanning
-                const aggressiveFiles = [
-                    // Admin files
-                    'admin.php', 'administrator.php', 'login.php', 'auth.php',
-                    'panel.php', 'control.php', 'manage.php', 'dashboard.php',
-                    
-                    // Info disclosure
-                    'phpinfo.php', 'info.php', 'server-info', 'server-status',
-                    
-                    // Common CMS files
-                    'install.php', 'setup.php', 'upgrade.php', 'migration.php',
-                    
-                    // API files
-                    'api.php', 'rest.php', 'graphql.php', 'webhook.php'
-                ];
-
-                await this.scanFileList(aggressiveFiles, 'aggressive');
-            }
-
-            async analyzeJavaScriptFiles() {
-                // Get all discovered JS files
-                const jsFiles = Array.from(this.discoveredFiles.keys()).filter(file => 
-                    file.endsWith('.js') && !file.includes('jquery') && !file.includes('bootstrap')
-                );
-
-                for (const jsFile of jsFiles) {
-                    await this.analyzeJSFile(jsFile);
-                }
-            }
-
-            async analyzeJSFile(filename) {
-                try {
-                    const content = await this.fetchFileContent(filename);
-                    if (content) {
-                        this.extractEndpointsFromJS(content);
-                        this.extractSecretsFromJS(content, filename);
-                    }
-                } catch (error) {
-                    // Couldn't analyze JS file
-                }
-            }
-
-            extractEndpointsFromJS(content) {
-                // Extract API endpoints from JavaScript code
-                const patterns = [
-                    /["'`](\/api\/[^"'`\s]+)["'`]/g,
-                    /["'`](\/rest\/[^"'`\s]+)["'`]/g,
-                    /["'`](https?:\/\/[^"'`\s]+\/api\/[^"'`\s]+)["'`]/g,
-                    /fetch\s*\(\s*["'`]([^"'`]+)["'`]/g,
-                    /axios\.[a-z]+\s*\(\s*["'`]([^"'`]+)["'`]/g,
-                    /\$\.ajax\s*\(\s*{[^}]*url\s*:\s*["'`]([^"'`]+)["'`]/g
-                ];
-
-                patterns.forEach(pattern => {
-                    let match;
-                    while ((match = pattern.exec(content)) !== null) {
-                        this.jsEndpoints.add(match[1]);
-                    }
-                });
-            }
-
-            extractSecretsFromJS(content, filename) {
-                // Look for potential secrets in JavaScript
-                const secretPatterns = [
-                    /api[_-]?key["'\s]*[:=]["'\s]*([a-zA-Z0-9_-]{20,})/gi,
-                    /secret["'\s]*[:=]["'\s]*([a-zA-Z0-9_-]{20,})/gi,
-                    /token["'\s]*[:=]["'\s]*([a-zA-Z0-9_-]{20,})/gi,
-                    /password["'\s]*[:=]["'\s]*([a-zA-Z0-9_-]{8,})/gi
-                ];
-
-                secretPatterns.forEach(pattern => {
-                    const matches = content.match(pattern);
-                    if (matches && matches.length > 0) {
-                        this.sensitiveFiles.add(filename);
-                    }
-                });
-            }
-
-            async scanFileList(files, category) {
-                for (const file of files) {
-                    await this.checkFile(file, category);
-                }
-            }
-
-            async checkFile(path, category = 'general') {
-                try {
-                    const fullUrl = `${this.baseUrl}/${path}`;
-                    const response = await fetch(fullUrl, { 
-                        method: 'HEAD',
-                        cache: 'no-cache'
-                    });
-                    
-                    if (response.ok) {
-                        const size = response.headers.get('content-length') || 'Unknown';
-                        const type = response.headers.get('content-type') || 'Unknown';
-                        const lastModified = response.headers.get('last-modified') || 'Unknown';
-                        
-                        this.discoveredFiles.set(path, {
-                            url: fullUrl,
-                            size: this.formatFileSize(size),
-                            type: type,
-                            category: category,
-                            accessible: true,
-                            lastModified: lastModified,
-                            status: response.status
-                        });
-                        
-                        // Add parent directories
-                        const pathParts = path.split('/');
-                        if (pathParts.length > 1) {
-                            for (let i = 1; i < pathParts.length; i++) {
-                                const directory = pathParts.slice(0, i).join('/');
-                                this.discoveredFolders.add(directory);
-                            }
-                        }
-                        
-                        return true;
-                    }
-                } catch (error) {
-                    // File doesn't exist or can't be accessed
-                }
-                return false;
-            }
-
-            formatFileSize(bytes) {
-                if (bytes === 'Unknown' || !bytes) return 'Unknown';
-                const num = parseInt(bytes);
-                if (num < 1024) return `${num} B`;
-                if (num < 1048576) return `${(num / 1024).toFixed(1)} KB`;
-                if (num < 1073741824) return `${(num / 1048576).toFixed(1)} MB`;
-                return `${(num / 1073741824).toFixed(1)} GB`;
-            }
-
-            async checkDirectory(path) {
-                try {
-                    const fullUrl = `${this.baseUrl}/${path}/`;
-                    const response = await fetch(fullUrl, { 
-                        method: 'HEAD',
-                        cache: 'no-cache'
-                    });
-                    
-                    if (response.ok) {
-                        this.discoveredFolders.add(path);
-                        await this.checkDirectoryListing(path);
-                        return true;
-                    }
-                } catch (error) {
-                    // Directory doesn't exist or can't be accessed
-                }
-                return false;
-            }
-
-            async checkDirectoryListings() {
-                // Check root directory listing
-                await this.checkDirectoryListing('');
-                
-                // Check discovered directories
-                for (const folder of this.discoveredFolders) {
-                    await this.checkDirectoryListing(folder);
-                }
-            }
-
-            async checkDirectoryListing(path) {
-                try {
-                    const fullUrl = path ? `${this.baseUrl}/${path}/` : `${this.baseUrl}/`;
-                    const response = await fetch(fullUrl, { cache: 'no-cache' });
-                    
-                    if (response.ok) {
-                        const html = await response.text();
-                        this.parseDirectoryListing(html, path);
-                    }
-                } catch (error) {
-                    // Can't access directory listing
-                }
-            }
-
-            parseDirectoryListing(html, basePath) {
-                // Multiple patterns for different directory listing formats
-                const patterns = [
-                    /<a[^>]*href=["']([^"']+)["'][^>]*>([^<]+)<\/a>/gi,
-                    /<a[^>]*href=([^>\s]+)[^>]*>([^<]+)<\/a>/gi
-                ];
-
-                patterns.forEach(pattern => {
-                    let match;
-                    while ((match = pattern.exec(html)) !== null) {
-                        let href = match[1].replace(/['"]/g, '');
-                        let text = match[2].trim();
-
-                        // Skip navigation and external links
-                        if (href === '../' || href === '/' || href.startsWith('http') || 
-                            href.startsWith('mailto:') || href.startsWith('ftp:')) {
-                            continue;
-                        }
-
-                        href = href.replace(/^\.\//, '');
-                        const fullPath = basePath ? `${basePath}/${href}` : href;
-
-                        if (href.endsWith('/')) {
-                            this.discoveredFolders.add(fullPath.slice(0, -1));
-                        } else {
-                            this.discoveredFiles.set(fullPath, {
-                                url: `${this.baseUrl}/${fullPath}`,
-                                size: 'Unknown',
-                                type: 'Unknown',
-                                category: 'directory-listing',
-                                accessible: true,
-                                lastModified: 'Unknown',
-                                status: 200
-                            });
-                        }
-                    }
-                });
-            }
-
-            async parseRobotsTxt() {
-                try {
-                    const response = await fetch(`${this.baseUrl}/robots.txt`, { cache: 'no-cache' });
-                    if (response.ok) {
-                        const text = await response.text();
-                        this.parseRobotsContent(text);
-                    }
-                } catch (error) {
-                    // robots.txt not accessible
-                }
-            }
-
-            parseRobotsContent(content) {
-                const lines = content.split('\n');
-                const sitemapUrls = [];
-                
-                for (const line of lines) {
-                    const trimmed = line.trim();
-                    
-                    // Extract sitemap URLs
-                    const sitemapMatch = trimmed.match(/^Sitemap:\s*(.+)$/i);
-                    if (sitemapMatch) {
-                        sitemapUrls.push(sitemapMatch[1]);
-                        continue;
-                    }
-                    
-                    // Extract disallowed/allowed paths
-                    const pathMatch = trimmed.match(/^(Disallow|Allow):\s*(.+)$/i);
-                    if (pathMatch) {
-                        const path = pathMatch[2].trim();
-                        if (path && path !== '/' && !path.startsWith('http')) {
-                            const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-                            if (cleanPath.includes('.')) {
-                                this.checkFile(cleanPath, 'robots-txt');
-                            } else if (cleanPath) {
-                                this.discoveredFolders.add(cleanPath);
-                            }
-                        }
-                    }
-                }
-                
-                // Process discovered sitemaps
-                sitemapUrls.forEach(url => {
-                    if (url.startsWith(this.baseUrl)) {
-                        const path = url.replace(this.baseUrl + '/', '');
-                        this.checkFile(path, 'sitemap');
-                    }
-                });
-            }
-
-            async parseSitemaps() {
-                const sitemapUrls = [
-                    'sitemap.xml', 'sitemap_index.xml', 'sitemap.json',
-                    'sitemaps.xml', 'sitemap1.xml', 'sitemap.txt'
-                ];
-                
-                for (const sitemapUrl of sitemapUrls) {
-                    await this.parseSitemap(sitemapUrl);
-                }
-            }
-
-            async parseSitemap(sitemapUrl) {
-                try {
-                    const response = await fetch(`${this.baseUrl}/${sitemapUrl}`, { cache: 'no-cache' });
-                    if (response.ok) {
-                        const text = await response.text();
-                        
-                        if (sitemapUrl.endsWith('.json')) {
-                            this.parseSitemapJson(text);
-                        } else if (sitemapUrl.endsWith('.txt')) {
-                            this.parseSitemapTxt(text);
-                        } else {
-                            this.parseSitemapXml(text);
-                        }
-                    }
-                } catch (error) {
-                    // Sitemap not accessible
-                }
-            }
-
-            parseSitemapJson(text) {
-                try {
-                    const json = JSON.parse(text);
-                    const urls = json.urls || json.urlset || json;
-                    
-                    if (Array.isArray(urls)) {
-                        urls.forEach(item => {
-                            const url = typeof item === 'string' ? item : item.url || item.loc;
-                            if (url) {
-                                this.processSitemapUrl(url);
-                            }
-                        });
-                    }
-                } catch (error) {
-                    // Invalid JSON
-                }
-            }
-
-            parseSitemapTxt(text) {
-                const lines = text.split('\n');
-                lines.forEach(line => {
-                    const url = line.trim();
-                    if (url && (url.startsWith('http') || url.startsWith('/'))) {
-                        this.processSitemapUrl(url);
-                    }
-                });
-            }
-
-            parseSitemapXml(text) {
-                // Extract URLs from XML sitemap
-                const urlPattern = /<loc>(.*?)<\/loc>/g;
-                let match;
-                
-                while ((match = urlPattern.exec(text)) !== null) {
-                    this.processSitemapUrl(match[1]);
-                }
-            }
-
-            processSitemapUrl(url) {
-                let path;
-                
-                if (url.startsWith('http')) {
-                    if (url.startsWith(this.baseUrl)) {
-                        path = url.replace(this.baseUrl, '').replace(/^\//, '');
-                    } else {
-                        return; // External URL
-                    }
-                } else {
-                    path = url.replace(/^\//, '');
-                }
-                
-                if (path && !path.includes('?')) { // Skip URLs with query parameters for now
-                    this.discoveredFiles.set(path, {
-                        url: url.startsWith('http') ? url : `${this.baseUrl}/${path}`,
-                        size: 'Unknown',
-                        type: 'Unknown',
-                        category: 'sitemap',
-                        accessible: true,
-                        lastModified: 'Unknown',
-                        status: 200
-                    });
-                }
-            }
-
-            displayResults() {
-                document.getElementById('resultsSection').classList.remove('hidden');
-                this.updateTreeStats();
-                this.renderFileList();
-            }
-
-            updateTreeStats() {
-                const totalFiles = this.discoveredFiles.size;
-                const totalFolders = this.discoveredFolders.size;
-                const sensitiveCount = this.sensitiveFiles.size;
-                const jsEndpointCount = this.jsEndpoints.size;
-                
-                let statsText = `${totalFiles} files, ${totalFolders} directories`;
-                if (sensitiveCount > 0) statsText += `, ${sensitiveCount} sensitive`;
-                if (jsEndpointCount > 0) statsText += `, ${jsEndpointCount} endpoints`;
-                
-                document.getElementById('treeStats').textContent = statsText;
-            }
-
-            renderFileList() {
-                const fileList = document.getElementById('fileList');
-                fileList.innerHTML = '';
-
-                if (this.discoveredFiles.size === 0 && this.discoveredFolders.size === 0) {
-                    fileList.innerHTML = '<div class="error">No files or directories discovered. The website may have strict access controls or CORS policies.</div>';
-                    return;
-                }
-
-                // Create combined list of folders and files
-                const items = [];
-                
-                // Add folders
-                Array.from(this.discoveredFolders).sort().forEach(folder => {
-                    items.push({
-                        type: 'folder',
-                        name: folder,
-                        path: folder,
-                        category: 'directory'
-                    });
-                });
-
-                // Add files
-                Array.from(this.discoveredFiles.entries()).sort().forEach(([path, info]) => {
-                    items.push({
-                        type: 'file',
-                        name: path.split('/').pop(),
-                        path: path,
-                        info: info,
-                        category: info.category
-                    });
-                });
-
-                // Render items
-                items.forEach(item => {
-                    const element = this.createFileItem(item);
-                    fileList.appendChild(element);
-                });
-            }
-
-            createFileItem(item) {
-                const div = document.createElement('div');
-                div.className = `file-item ${item.type}`;
-                
-                if (item.type === 'file' && this.sensitiveFiles.has(item.path)) {
-                    div.style.borderLeftColor = 'var(--error)';
-                    div.style.background = 'rgba(218, 54, 51, 0.1)';
-                }
-                
-                const icon = this.getFileIcon(item);
-                const categoryBadge = this.getCategoryBadge(item.category);
-                
-                div.innerHTML = `
-                    <div class="file-info">
-                        <span class="file-icon">${icon}</span>
-                        <span class="file-name">${item.name}</span>
-                        ${categoryBadge}
-                        ${item.info ? `<span style="font-size: 10px; color: var(--text-muted); margin-left: 8px;">${item.info.size}</span>` : ''}
-                    </div>
-                    <div class="file-actions">
-                        ${item.type === 'file' ? `
-                            <a href="${item.info.url}" target="_blank" onclick="event.stopPropagation()">view</a>
-                            <a href="#" onclick="event.stopPropagation(); explorer.copyUrl('${item.info.url}')">copy</a>
-                        ` : ''}
-                    </div>
-                `;
-                
-                if (item.type === 'file') {
-                    div.onclick = () => this.viewFile(item.path, item.info);
-                } else {
-                    div.onclick = () => this.exploreFolder(item.path);
-                }
-                
-                return div;
-            }
-
-            getFileIcon(item) {
-                if (item.type === 'folder') return '📁';
-                
-                const filename = item.name.toLowerCase();
-                const ext = filename.split('.').pop();
-                
-                // Sensitive file indicators
-                if (this.sensitiveFiles.has(item.path)) {
-                    return '🔒';
-                }
-                
-                // Category-based icons
-                if (item.category === 'backup') return '💾';
-                if (item.category === 'archive') return '📦';
-                if (item.category === 'config') return '⚙️';
-                if (item.category === 'sensitive') return '⚠️';
-                
-                // Extension-based icons
-                const iconMap = {
-                    'html': '🌐', 'htm': '🌐', 'xhtml': '🌐',
-                    'css': '🎨', 'scss': '🎨', 'sass': '🎨', 'less': '🎨',
-                    'js': '⚡', 'ts': '⚡', 'jsx': '⚡', 'tsx': '⚡',
-                    'json': '📋', 'xml': '📰', 'yaml': '📋', 'yml': '📋',
-                    'php': '🐘', 'py': '🐍', 'java': '☕', 'rb': '💎',
-                    'txt': '📄', 'md': '📝', 'readme': '📖',
-                    'log': '📜', 'sql': '🗄️', 'db': '🗄️', 'sqlite': '🗄️',
-                    'jpg': '🖼️', 'jpeg': '🖼️', 'png': '🖼️', 'gif': '🖼️', 'svg': '🎭',
-                    'pdf': '📕', 'doc': '📘', 'docx': '📘',
-                    'zip': '📦', 'rar': '📦', 'tar': '📦', 'gz': '📦',
-                    'ico': '🎯', 'env': '🔐', 'htaccess': '🔧'
-                };
-                
-                return iconMap[ext] || '📄';
-            }
-
-            getCategoryBadge(category) {
-                const badges = {
-                    'sensitive': '<span style="background: var(--error); color: white; padding: 2px 6px; border-radius: 10px; font-size: 9px; margin-left: 8px;">SENSITIVE</span>',
-                    'backup': '<span style="background: var(--warning); color: white; padding: 2px 6px; border-radius: 10px; font-size: 9px; margin-left: 8px;">BACKUP</span>',
-                    'config': '<span style="background: var(--purple); color: white; padding: 2px 6px; border-radius: 10px; font-size: 9px; margin-left: 8px;">CONFIG</span>',
-                    'archive': '<span style="background: var(--cyan); color: black; padding: 2px 6px; border-radius: 10px; font-size: 9px; margin-left: 8px;">ARCHIVE</span>'
-                };
-                
-                return badges[category] || '';
-            }
-
-            async viewFile(filename, fileInfo) {
-                // Update selection
-                document.querySelectorAll('.file-item').forEach(item => item.classList.remove('selected'));
-                event.target.closest('.file-item').classList.add('selected');
-                
-                this.currentFile = { filename, fileInfo };
-                
-                // Update UI
-                document.getElementById('welcomeMessage').classList.add('hidden');
-                document.getElementById('contentTitle').textContent = `📄 ${filename}`;
-                
-                // Show action buttons
-                ['downloadBtn', 'copyBtn', 'openBtn', 'analyzeBtn'].forEach(id => {
-                    document.getElementById(id).style.display = 'inline-block';
-                });
-                
-                try {
-                    const content = await this.fetchFileContent(filename);
-                    if (content !== null) {
-                        this.displayFileContent(content, filename, fileInfo);
-                    } else {
-                        this.showCORSAlternatives(filename, fileInfo.url);
-                    }
-                } catch (error) {
-                    this.showCORSAlternatives(filename, fileInfo.url);
-                }
-            }
-
-            async fetchFileContent(filename) {
-                const fileUrl = `${this.baseUrl}/${filename}`;
-                
-                // Try multiple methods to fetch content
-                const methods = [
-                    () => this.directFetch(fileUrl),
-                    () => this.proxyFetch(fileUrl),
-                    () => this.corsProxyFetch(fileUrl)
-                ];
-                
-                for (const method of methods) {
-                    try {
-                        const content = await method();
-                        if (content) return content;
-                    } catch (error) {
-                        continue;
-                    }
-                }
-                
-                return null;
-            }
-
-            async directFetch(url) {
-                const response = await fetch(url, {
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'text/plain,text/html,application/json,*/*'
-                    }
-                });
-                
-                if (response.ok) {
-                    return await response.text();
-                }
-                throw new Error('Direct fetch failed');
-            }
-
-            async proxyFetch(url) {
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                const response = await fetch(proxyUrl);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.contents) {
-                        return data.contents;
-                    }
-                }
-                throw new Error('Proxy fetch failed');
-            }
-
-            async corsProxyFetch(url) {
-                const proxyUrl = `https://cors-anywhere.herokuapp.com/${url}`;
-                const response = await fetch(proxyUrl);
-                
-                if (response.ok) {
-                    return await response.text();
-                }
-                throw new Error('CORS proxy fetch failed');
-            }
-
-            displayFileContent(content, filename, fileInfo) {
-                document.getElementById('codeContainer').classList.remove('hidden');
-                
-                // Update file info
-                document.getElementById('fileType').textContent = this.getFileType(filename, fileInfo);
-                document.getElementById('fileSize').textContent = fileInfo.size || 'Unknown';
-                document.getElementById('encoding').textContent = 'UTF-8';
-                
-                // Process content
-                const lines = content.split('\n');
-                document.getElementById('lineCount').textContent = `${lines.length} lines`;
-                
-                // Generate line numbers
-                const lineNumbers = lines.map((_, i) => i + 1).join('\n');
-                document.getElementById('lineNumbers').textContent = lineNumbers;
-                
-                // Apply syntax highlighting
-                const highlightedContent = this.applySyntaxHighlighting(content, filename);
-                document.getElementById('fileCode').innerHTML = highlightedContent;
-                
-                // Auto-scroll to code
-                document.getElementById('codeContainer').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            getFileType(filename, fileInfo) {
-                const ext = filename.split('.').pop().toLowerCase();
-                const typeMap = {
-                    'html': 'HTML Document',
-                    'css': 'Stylesheet',
-                    'js': 'JavaScript',
-                    'json': 'JSON Data',
-                    'xml': 'XML Document',
-                    'php': 'PHP Script',
-                    'py': 'Python Script',
-                    'txt': 'Text File',
-                    'md': 'Markdown',
-                    'log': 'Log File',
-                    'sql': 'SQL Database',
-                    'env': 'Environment Variables'
-                };
-                
-                return typeMap[ext] || fileInfo.type || 'Unknown File';
-            }
-
-            applySyntaxHighlighting(content, filename) {
-                const ext = filename.split('.').pop().toLowerCase();
-                
-                // Basic syntax highlighting for common file types
-                if (ext === 'json') {
-                    return this.highlightJSON(content);
-                } else if (ext === 'xml') {
-                    return this.highlightXML(content);
-                } else if (['js', 'jsx', 'ts', 'tsx'].includes(ext)) {
-                    return this.highlightJavaScript(content);
-                } else if (ext === 'css') {
-                    return this.highlightCSS(content);
-                } else if (ext === 'html') {
-                    return this.highlightHTML(content);
-                }
-                
-                return this.escapeHtml(content);
-            }
-
-            highlightJSON(content) {
-                return content
-                    .replace(/(".*?")\s*:/g, '<span class="syntax-string">$1</span>:')
-                    .replace(/:\s*(".*?")/g, ': <span class="syntax-string">$1</span>')
-                    .replace(/:\s*(\d+)/g, ': <span class="syntax-number">$1</span>')
-                    .replace(/:\s*(true|false|null)/g, ': <span class="syntax-keyword">$1</span>');
-            }
-
-            highlightXML(content) {
-                return content
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/&lt;(\/?[^&\s]+)([^&]*?)&gt;/g, 
-                        '&lt;<span class="syntax-tag">$1</span><span class="syntax-attribute">$2</span>&gt;')
-                    .replace(/<!--(.*?)-->/g, '<span class="syntax-comment">&lt;!--$1--&gt;</span>');
-            }
-
-            highlightJavaScript(content) {
-                const keywords = ['function', 'var', 'let', 'const', 'if', 'else', 'for', 'while', 'return', 'class', 'import', 'export'];
-                let highlighted = this.escapeHtml(content);
-                
-                // Highlight keywords
-                keywords.forEach(keyword => {
-                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
-                    highlighted = highlighted.replace(regex, `<span class="syntax-keyword">${keyword}</span>`);
-                });
-                
-                // Highlight strings
-                highlighted = highlighted.replace(/(["'`])((?:(?!\1)[^\\]|\\.)*)(\1)/g, 
-                    '<span class="syntax-string">$1$2$3</span>');
-                
-                // Highlight comments
-                highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="syntax-comment">                if (item.type === 'file' && this.sensitiveFiles.has(item.path)) {
-                    div.style.borderLeftColor = 'var(</span>');
-                highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="syntax-comment">                if (item.type === 'file' && this.sensitiveFiles.has(item.path)) {
-                    div.style.borderLeftColor = 'var(</span>');
-                
-                // Highlight numbers
-                highlighted = highlighted.replace(/\b\d+(\.\d+)?\b/g, '<span class="syntax-number">                if (item.type === 'file' && this.sensitiveFiles.has(item.path)) {
-                    div.style.borderLeftColor = 'var(</span>');
-                
-                return highlighted;
-            }
-
-            highlightCSS(content) {
-                let highlighted = this.escapeHtml(content);
-                
-                // Highlight selectors
-                highlighted = highlighted.replace(/^([^{]+){/gm, '<span class="syntax-tag">$1</span>{');
-                
-                // Highlight properties
-                highlighted = highlighted.replace(/(\w+)(\s*:)/g, '<span class="syntax-attribute">$1</span>$2');
-                
-                // Highlight strings
-                highlighted = highlighted.replace(/(["'])((?:(?!\1)[^\\]|\\.)*)(\1)/g, 
-                    '<span class="syntax-string">$1$2$3</span>');
-                
-                // Highlight comments
-                highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="syntax-comment">                if (item.type === 'file' && this.sensitiveFiles.has(item.path)) {
-                    div.style.borderLeftColor = 'var(</span>');
-                
-                return highlighted;
-            }
-
-            highlightHTML(content) {
-                return content
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/&lt;(\/?[a-zA-Z][^&]*?)&gt;/g, '&lt;<span class="syntax-tag">$1</span>&gt;')
-                    .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="syntax-comment">$1</span>');
-            }
-
-            escapeHtml(content) {
-                return content
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#39;');
-            }
-
-            showCORSAlternatives(filename, fileUrl) {
-                document.getElementById('codeContainer').classList.remove('hidden');
-                document.getElementById('fileType').textContent = 'Access Blocked';
-                document.getElementById('fileSize').textContent = 'CORS Policy';
-                document.getElementById('lineNumbers').textContent = '';
-                
-                const alternatives = `❌ CORS Policy Blocked Access
-
-This file exists but cannot be displayed due to browser security restrictions.
-
-🔧 ALTERNATIVE ACCESS METHODS:
-
-1. 📋 DIRECT URL ACCESS:
-   ${fileUrl}
-
-2. 🌐 BROWSER METHODS:
-   • Right-click above → "Open in new tab"
-   • Copy URL to address bar
-   • Use browser developer tools (F12)
-
-3. 💻 COMMAND LINE TOOLS:
-   curl "${fileUrl}"
-   wget "${fileUrl}"
-
-4. 🌊 ONLINE PROXY TOOLS:
-   • web.archive.org (Wayback Machine)
-   • Online CORS proxy services
-   • Browser extensions for CORS
-
-5. 🛠️ DEVELOPER OPTIONS:
-   • Disable CORS in browser (for testing)
-   • Use Postman or similar API tools
-   • Server-side proxy scripts
-
-The file is publicly accessible - just not through this web interface due to same-origin policy restrictions.`;
-
-                document.getElementById('fileCode').textContent = alternatives;
-            }
-
-            filterFiles(searchTerm) {
-                const items = document.querySelectorAll('.file-item');
-                const term = searchTerm.toLowerCase();
-                
-                items.forEach(item => {
-                    const fileName = item.querySelector('.file-name').textContent.toLowerCase();
-                    const shouldShow = !term || fileName.includes(term);
-                    item.style.display = shouldShow ? 'flex' : 'none';
-                });
-                
-                // Update stats for visible items
-                const visibleItems = Array.from(items).filter(item => item.style.display !== 'none');
-                const visibleFiles = visibleItems.filter(item => item.classList.contains('file-item') && !item.classList.contains('folder')).length;
-                const visibleFolders = visibleItems.filter(item => item.classList.contains('folder')).length;
-                
-                if (term) {
-                    document.getElementById('treeStats').textContent = `${visibleFiles} files, ${visibleFolders} directories (filtered)`;
-                } else {
-                    this.updateTreeStats();
-                }
-            }
-
-            copyContent() {
-                const content = document.getElementById('fileCode').textContent;
-                navigator.clipboard.writeText(content).then(() => {
-                    this.showAlert('Content copied to clipboard!', 'success');
-                }).catch(() => {
-                    this.showAlert('Failed to copy content', 'error');
-                });
-            }
-
-            copyUrl(url) {
-                navigator.clipboard.writeText(url).then(() => {
-                    this.showAlert('URL copied to clipboard!', 'success');
-                }).catch(() => {
-                    this.showAlert('Failed to copy URL', 'error');
-                });
-            }
-
-            downloadFile() {
-                if (!this.currentFile) return;
-                
-                const content = document.getElementById('fileCode').textContent;
-                const blob = new Blob([content], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = this.currentFile.filename.split('/').pop();
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                this.showAlert('File downloaded!', 'success');
-            }
-
-            openInNewTab() {
-                if (!this.currentFile) return;
-                
-                window.open(this.currentFile.fileInfo.url, '_blank');
-            }
-
-            analyzeFile() {
-                if (!this.currentFile) return;
-                
-                const content = document.getElementById('fileCode').textContent;
-                const analysis = this.performFileAnalysis(content, this.currentFile.filename);
-                
-                this.showFileAnalysis(analysis);
-            }
-
-            performFileAnalysis(content, filename) {
-                const analysis = {
-                    size: content.length,
-                    lines: content.split('\n').length,
-                    words: content.split(/\s+/).length,
-                    characters: content.length,
-                    charactersNoSpaces: content.replace(/\s/g, '').length
-                };
-                
-                const ext = filename.split('.').pop().toLowerCase();
-                
-                if (['js', 'jsx', 'ts', 'tsx'].includes(ext)) {
-                    analysis.functions = (content.match(/function\s+\w+/g) || []).length;
-                    analysis.variables = (content.match(/(?:var|let|const)\s+\w+/g) || []).length;
-                    analysis.apiCalls = (content.match(/fetch\s*\(|axios\.|ajax\s*\(/g) || []).length;
-                }
-                
-                if (ext === 'css') {
-                    analysis.rules = (content.match(/[^{}]*{[^{}]*}/g) || []).length;
-                    analysis.selectors = (content.match(/[^{}]*{/g) || []).length;
-                }
-                
-                if (ext === 'html') {
-                    analysis.tags = (content.match(/<[^>]+>/g) || []).length;
-                    analysis.links = (content.match(/<a\s+[^>]*href/gi) || []).length;
-                    analysis.images = (content.match(/<img\s+[^>]*src/gi) || []).length;
-                }
-                
-                return analysis;
-            }
-
-            showFileAnalysis(analysis) {
-                let analysisText = `📊 FILE ANALYSIS\n\n`;
-                analysisText += `📏 Size: ${analysis.size} bytes\n`;
-                analysisText += `📄 Lines: ${analysis.lines}\n`;
-                analysisText += `🔤 Words: ${analysis.words}\n`;
-                analysisText += `📝 Characters: ${analysis.characters}\n`;
-                analysisText += `📝 Characters (no spaces): ${analysis.charactersNoSpaces}\n`;
-                
-                if (analysis.functions !== undefined) {
-                    analysisText += `\n🔧 JAVASCRIPT ANALYSIS:\n`;
-                    analysisText += `⚡ Functions: ${analysis.functions}\n`;
-                    analysisText += `📦 Variables: ${analysis.variables}\n`;
-                    analysisText += `🌐 API Calls: ${analysis.apiCalls}\n`;
-                }
-                
-                if (analysis.rules !== undefined) {
-                    analysisText += `\n🎨 CSS ANALYSIS:\n`;
-                    analysisText += `📋 Rules: ${analysis.rules}\n`;
-                    analysisText += `🎯 Selectors: ${analysis.selectors}\n`;
-                }
-                
-                if (analysis.tags !== undefined) {
-                    analysisText += `\n🌐 HTML ANALYSIS:\n`;
-                    analysisText += `🏷️ Tags: ${analysis.tags}\n`;
-                    analysisText += `🔗 Links: ${analysis.links}\n`;
-                    analysisText += `🖼️ Images: ${analysis.images}\n`;
-                }
-                
-                alert(analysisText);
-            }
-
-            exploreFolder(folderPath) {
-                this.showAlert(`Folder exploration for "${folderPath}" - Feature coming in next update!`, 'info');
-            }
-
-            showAlert(message, type) {
-                // Remove existing alerts
-                this.clearAlerts();
-                
-                const alert = document.createElement('div');
-                alert.className = `alert ${type}`;
-                alert.innerHTML = `
-                    <strong>${type.charAt(0).toUpperCase() + type.slice(1)}:</strong> ${message}
-                    <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; color: inherit; cursor: pointer; font-size: 18px; line-height: 1;">&times;</button>
-                `;
-                
-                document.querySelector('.input-section').appendChild(alert);
-                
-                // Auto-remove after 5 seconds
-                setTimeout(() => {
-                    if (alert.parentElement) {
-                        alert.remove();
-                    }
-                }, 5000);
-            }
-
-            clearAlerts() {
-                document.querySelectorAll('.alert').forEach(alert => alert.remove());
-            }
-
-            async delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+        let currentUrl = '';
+        let discoveredFiles = new Set();
+
+        // Common file extensions to look for
+        const commonFiles = [
+            'index.html', 'index.php', 'home.html', 'default.html',
+            'robots.txt', 'sitemap.xml', 'sitemap.txt', '.htaccess',
+            'favicon.ico', 'apple-touch-icon.png', 'manifest.json',
+            'style.css', 'styles.css', 'main.css', 'app.css',
+            'script.js', 'main.js', 'app.js', 'jquery.js',
+            'package.json', 'composer.json', 'README.md', 'LICENSE',
+            'config.js', 'config.json', 'settings.json'
+        ];
+
+        // Common directories to check
+        const commonDirs = [
+            'css/', 'js/', 'javascript/', 'scripts/', 'assets/', 'img/', 'images/', 
+            'pictures/', 'photos/', 'media/', 'files/', 'docs/', 'admin/', 
+            'api/', 'includes/', 'lib/', 'libraries/', 'vendor/', 'node_modules/',
+            'src/', 'dist/', 'build/', 'public/', 'static/', 'uploads/'
+        ];
+
+        async function scanWebsite() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert('Please enter a valid URL');
+                return;
+            }
+
+            currentUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+            discoveredFiles.clear();
+
+            const scanBtn = document.getElementById('scanBtn');
+            const results = document.getElementById('results');
+            const fileTree = document.getElementById('fileTree');
+
+            scanBtn.disabled = true;
+            scanBtn.textContent = '🔍 Scanning...';
+            results.style.display = 'block';
+            fileTree.innerHTML = '<div class="loading">Exploring website structure...</div>';
+
+            try {
+                // Start with robots.txt and sitemap.xml for clues
+                await checkSpecialFiles();
+                
+                // Check common files
+                await checkCommonFiles();
+                
+                // Check common directories
+                await checkCommonDirectories();
+
+                // Try to find more files through directory listing
+                await tryDirectoryListing();
+
+                displayResults();
+            } catch (error) {
+                fileTree.innerHTML = `<div class="error">Error scanning website: ${error.message}</div>`;
+            } finally {
+                scanBtn.disabled = false;
+                scanBtn.textContent = '🚀 Explore Website';
             }
         }
 
-        // Initialize the explorer
-        let explorer;
-        document.addEventListener('DOMContentLoaded', () => {
-            explorer = new AdvancedWebsiteExplorer();
-        });
+        async function checkSpecialFiles() {
+            const specialFiles = ['robots.txt', 'sitemap.xml', 'sitemap.txt'];
+            
+            for (const file of specialFiles) {
+                try {
+                    const response = await fetchWithTimeout(`${currentUrl}/${file}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        discoveredFiles.add({
+                            name: file,
+                            path: file,
+                            type: 'file',
+                            size: content.length,
+                            content: content
+                        });
 
-        // Global functions for inline event handlers
-        window.explorer = {
-            copyUrl: (url) => explorer.copyUrl(url)
-        };
+                        // Parse robots.txt for additional paths
+                        if (file === 'robots.txt') {
+                            parseRobotsTxt(content);
+                        }
+                    }
+                } catch (e) {
+                    console.log(`Could not fetch ${file}`);
+                }
+            }
+        }
+
+        async function checkCommonFiles() {
+            const promises = commonFiles.map(async (file) => {
+                try {
+                    const response = await fetchWithTimeout(`${currentUrl}/${file}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        discoveredFiles.add({
+                            name: file,
+                            path: file,
+                            type: 'file',
+                            size: content.length,
+                            content: content
+                        });
+                    }
+                } catch (e) {
+                    // File doesn't exist or can't be accessed
+                }
+            });
+
+            await Promise.allSettled(promises);
+        }
+
+        async function checkCommonDirectories() {
+            const promises = commonDirs.map(async (dir) => {
+                try {
+                    const response = await fetchWithTimeout(`${currentUrl}/${dir}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        
+                        // Check if directory listing is enabled
+                        if (content.includes('Index of') || content.includes('Directory listing') || 
+                            content.includes('<title>') && content.toLowerCase().includes(dir.toLowerCase())) {
+                            
+                            discoveredFiles.add({
+                                name: dir,
+                                path: dir,
+                                type: 'directory',
+                                content: content
+                            });
+
+                            // Try to parse directory listing
+                            parseDirectoryListing(content, dir);
+                        }
+                    }
+                } catch (e) {
+                    // Directory doesn't exist or can't be accessed
+                }
+            });
+
+            await Promise.allSettled(promises);
+        }
+
+        async function tryDirectoryListing() {
+            try {
+                const response = await fetchWithTimeout(currentUrl + '/');
+                if (response.ok) {
+                    const content = await response.text();
+                    
+                    if (content.includes('Index of') || content.includes('Directory listing')) {
+                        parseDirectoryListing(content, '/');
+                    } else {
+                        // Try to extract file references from HTML
+                        extractFileReferences(content);
+                    }
+                }
+            } catch (e) {
+                console.log('Could not check root directory');
+            }
+        }
+
+        function parseRobotsTxt(content) {
+            const lines = content.split('\n');
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('Disallow:') || trimmed.startsWith('Allow:')) {
+                    const path = trimmed.split(':')[1]?.trim();
+                    if (path && path !== '/' && path.length > 1) {
+                        // Add discovered paths to check
+                        setTimeout(() => checkPath(path), 100);
+                    }
+                }
+            }
+        }
+
+        function parseDirectoryListing(content, basePath) {
+            const linkRegex = /<a\s+href=["']([^"']+)["'][^>]*>([^<]+)<\/a>/gi;
+            let match;
+
+            while ((match = linkRegex.exec(content)) !== null) {
+                const href = match[1];
+                const name = match[2].trim();
+
+                if (href !== '../' && !href.startsWith('http') && !href.startsWith('mailto:')) {
+                    const fullPath = basePath + href;
+                    
+                    if (href.endsWith('/')) {
+                        discoveredFiles.add({
+                            name: name,
+                            path: fullPath,
+                            type: 'directory'
+                        });
+                    } else {
+                        discoveredFiles.add({
+                            name: name,
+                            path: fullPath,
+                            type: 'file'
+                        });
+                    }
+                }
+            }
+        }
+
+        function extractFileReferences(content) {
+            // Extract CSS, JS, image references from HTML
+            const patterns = [
+                /href=["']([^"']+\.css[^"']*)["']/gi,
+                /src=["']([^"']+\.js[^"']*)["']/gi,
+                /src=["']([^"']+\.(png|jpg|jpeg|gif|svg|ico)[^"']*)["']/gi,
+                /url\(["']?([^"')]+\.(css|js|png|jpg|jpeg|gif|svg))["']?\)/gi
+            ];
+
+            patterns.forEach(pattern => {
+                let match;
+                while ((match = pattern.exec(content)) !== null) {
+                    const path = match[1];
+                    if (!path.startsWith('http') && !path.startsWith('//')) {
+                        const fileName = path.split('/').pop();
+                        if (fileName) {
+                            setTimeout(() => checkPath(path), 100);
+                        }
+                    }
+                }
+            });
+        }
+
+        async function checkPath(path) {
+            try {
+                const fullUrl = path.startsWith('/') ? currentUrl + path : `${currentUrl}/${path}`;
+                const response = await fetchWithTimeout(fullUrl);
+                
+                if (response.ok) {
+                    const content = await response.text();
+                    const fileName = path.split('/').pop() || path;
+                    
+                    discoveredFiles.add({
+                        name: fileName,
+                        path: path,
+                        type: path.endsWith('/') ? 'directory' : 'file',
+                        size: content.length,
+                        content: content
+                    });
+                }
+            } catch (e) {
+                // Path not accessible
+            }
+        }
+
+        async function fetchWithTimeout(url, timeout = 5000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+            
+            try {
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    mode: 'cors'
+                });
+                clearTimeout(timeoutId);
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+
+        function displayResults() {
+            const fileTree = document.getElementById('fileTree');
+            const resultsTitle = document.getElementById('resultsTitle');
+            
+            if (discoveredFiles.size === 0) {
+                fileTree.innerHTML = '<div class="error">No accessible files found. The website may have CORS restrictions or all files are protected.</div>';
+                return;
+            }
+
+            resultsTitle.textContent = `Discovered ${discoveredFiles.size} Files & Folders`;
+            
+            const files = Array.from(discoveredFiles).sort((a, b) => {
+                if (a.type !== b.type) {
+                    return a.type === 'directory' ? -1 : 1;
+                }
+                return a.name.localeCompare(b.name);
+            });
+
+            fileTree.innerHTML = files.map(file => {
+                const icon = file.type === 'directory' ? '📁' : getFileIcon(file.name);
+                const sizeInfo = file.size ? ` (${formatBytes(file.size)})` : '';
+                
+                return `
+                    <div class="${file.type}-item" onclick="showFileContent('${file.path}', '${file.type}')">
+                        <span class="icon">${icon}</span>
+                        <div>
+                            <div>${file.name}${sizeInfo}</div>
+                            <div class="file-path">${file.path}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop()?.toLowerCase();
+            const iconMap = {
+                'html': '🌐', 'css': '🎨', 'js': '⚡', 'json': '📋',
+                'php': '🐘', 'txt': '📄', 'md': '📝', 'xml': '📊',
+                'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️', 'gif': '🖼️', 'svg': '🖼️',
+                'ico': '🎯', 'pdf': '📕', 'zip': '📦'
+            };
+            return iconMap[ext] || '📄';
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        async function showFileContent(path, type) {
+            const fileTree = document.getElementById('fileTree');
+            
+            // Remove any existing content display
+            const existingContent = document.querySelector('.file-content');
+            if (existingContent) {
+                existingContent.remove();
+            }
+
+            if (type === 'directory') {
+                // Try to fetch directory contents
+                try {
+                    const response = await fetchWithTimeout(`${currentUrl}/${path}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'file-content';
+                        contentDiv.innerHTML = `<div class="file-path">Directory: ${path}</div>${escapeHtml(content)}`;
+                        fileTree.appendChild(contentDiv);
+                    }
+                } catch (e) {
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'error';
+                    contentDiv.textContent = 'Could not load directory contents';
+                    fileTree.appendChild(contentDiv);
+                }
+                return;
+            }
+
+            // Find the file in our discovered files
+            const file = Array.from(discoveredFiles).find(f => f.path === path);
+            
+            if (file && file.content) {
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'file-content';
+                contentDiv.innerHTML = `<div class="file-path">File: ${path}</div>${escapeHtml(file.content)}`;
+                fileTree.appendChild(contentDiv);
+            } else {
+                // Try to fetch the file content
+                try {
+                    const response = await fetchWithTimeout(`${currentUrl}/${path}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'file-content';
+                        contentDiv.innerHTML = `<div class="file-path">File: ${path}</div>${escapeHtml(content)}`;
+                        fileTree.appendChild(contentDiv);
+                    }
+                } catch (e) {
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'error';
+                    contentDiv.textContent = 'Could not load file contents';
+                    fileTree.appendChild(contentDiv);
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Allow Enter key to trigger scan
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                scanWebsite();
+            }
+        });
     </script>
 </body>
 </html>

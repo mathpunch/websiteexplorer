@@ -238,6 +238,27 @@
             cursor: pointer;
             border: 1px solid #000;
         }
+
+        .back-in-time-btn {
+            background: #000;
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, color 0.2s;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .back-in-time-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+            background-color: #fff;
+            color: #000;
+        }
+
     </style>
 </head>
 <body>
@@ -250,6 +271,7 @@
         <div class="input-section">
             <input type="url" class="url-input" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)" />
             <button class="scan-btn" id="scanBtn" onclick="scanWebsite()">🚀 Explore Website</button>
+            <button class="back-in-time-btn" id="backInTimeBtn" onclick="viewHistoricalVersions()" style="display: none;">⏳ View Past Versions</button>
         </div>
 
         <div class="results" id="results" style="display: none;">
@@ -262,7 +284,8 @@
 
     <script>
         let currentUrl = '';
-        let discoveredFiles = new Set();
+        // Using a Map with the file path as the key to prevent duplicates
+        let discoveredFiles = new Map();
 
         function showMessage(message) {
             const messageBox = document.createElement('div');
@@ -307,11 +330,13 @@
             discoveredFiles.clear();
 
             const scanBtn = document.getElementById('scanBtn');
+            const backInTimeBtn = document.getElementById('backInTimeBtn');
             const results = document.getElementById('results');
             const fileTree = document.getElementById('fileTree');
 
             scanBtn.disabled = true;
             scanBtn.textContent = '🔍 Scanning...';
+            backInTimeBtn.style.display = 'none';
             results.style.display = 'block';
             fileTree.innerHTML = '<div class="loading">Exploring website structure...</div>';
 
@@ -334,6 +359,7 @@
             } finally {
                 scanBtn.disabled = false;
                 scanBtn.textContent = '🚀 Explore Website';
+                backInTimeBtn.style.display = 'block';
             }
         }
 
@@ -345,7 +371,8 @@
                     const response = await fetchWithTimeout(`${currentUrl}/${file}`);
                     if (response.ok) {
                         const content = await response.text();
-                        discoveredFiles.add({
+                        // Use Map.set to add the file, overwriting any previous entry with the same path
+                        discoveredFiles.set(file, {
                             name: file,
                             path: file,
                             type: 'file',
@@ -370,7 +397,7 @@
                     const response = await fetchWithTimeout(`${currentUrl}/${file}`);
                     if (response.ok) {
                         const content = await response.text();
-                        discoveredFiles.add({
+                        discoveredFiles.set(file, {
                             name: file,
                             path: file,
                             type: 'file',
@@ -397,7 +424,7 @@
                         if (content.includes('Index of') || content.includes('Directory listing') || 
                             (content.includes('<title>') && content.toLowerCase().includes(dir.toLowerCase()))) {
                             
-                            discoveredFiles.add({
+                            discoveredFiles.set(dir, {
                                 name: dir,
                                 path: dir,
                                 type: 'directory',
@@ -460,13 +487,13 @@
                     const fullPath = basePath + href;
                     
                     if (href.endsWith('/')) {
-                        discoveredFiles.add({
+                        discoveredFiles.set(fullPath, {
                             name: name,
                             path: fullPath,
                             type: 'directory'
                         });
                     } else {
-                        discoveredFiles.add({
+                        discoveredFiles.set(fullPath, {
                             name: name,
                             path: fullPath,
                             type: 'file'
@@ -508,7 +535,7 @@
                     const content = await response.text();
                     const fileName = path.split('/').pop() || path;
                     
-                    discoveredFiles.add({
+                    discoveredFiles.set(path, {
                         name: fileName,
                         path: path,
                         type: path.endsWith('/') ? 'directory' : 'file',
@@ -549,7 +576,8 @@
 
             resultsTitle.textContent = `Discovered ${discoveredFiles.size} Files & Folders`;
             
-            const files = Array.from(discoveredFiles).sort((a, b) => {
+            // Get values from the Map to sort and display
+            const files = Array.from(discoveredFiles.values()).sort((a, b) => {
                 if (a.type !== b.type) {
                     return a.type === 'directory' ? -1 : 1;
                 }
@@ -621,7 +649,7 @@
             }
 
             // Find the file in our discovered files
-            const file = Array.from(discoveredFiles).find(f => f.path === path);
+            const file = discoveredFiles.get(path);
             
             if (file && file.content) {
                 const contentDiv = document.createElement('div');
@@ -652,6 +680,16 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function viewHistoricalVersions() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (url) {
+                const waybackUrl = `https://web.archive.org/web/*/${url}`;
+                window.open(waybackUrl, '_blank');
+            } else {
+                showMessage('Please enter a URL to view its historical versions.');
+            }
         }
 
         // Allow Enter key to trigger scan

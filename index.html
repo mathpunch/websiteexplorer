@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website File Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .scan-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .scan-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-section {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .file-tree {
+            margin-bottom: 30px;
+        }
+
+        .file-tree h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.3em;
+        }
+
+        .file-item {
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .file-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .file-item.folder {
+            border-left-color: #ffa726;
+            background: #fff3e0;
+        }
+
+        .file-item.folder:hover {
+            background: #ffe0b2;
+        }
+
+        .file-item .icon {
+            display: inline-block;
+            width: 20px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .file-content {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .file-content h4 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .file-content pre {
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #f44336;
+        }
+
+        .warning {
+            background: #fff3e0;
+            color: #ef6c00;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .breadcrumb {
+            padding: 10px 0;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Website File Explorer</h1>
+            <p>Discover and explore files and folders on any website</p>
+        </div>
+
+        <div class="input-section">
+            <input type="url" class="url-input" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)" />
+            <button class="scan-btn" id="scanBtn">🚀 Explore Website</button>
+            
+            <div class="warning">
+                <strong>Note:</strong> This tool attempts to discover publicly accessible files through various methods. Results depend on the website's configuration and security settings.
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="loading" id="loadingDiv">
+                <div class="spinner"></div>
+                <p>Scanning website structure...</p>
+            </div>
+
+            <div class="file-tree" id="fileTree" style="display: none;">
+                <h3>📁 Discovered Files & Folders</h3>
+                <div class="breadcrumb" id="breadcrumb">Root Directory</div>
+                <div id="fileList"></div>
+            </div>
+
+            <div class="file-content" id="fileContent" style="display: none;">
+                <h4 id="fileTitle">File Content</h4>
+                <pre id="fileCode"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class WebsiteExplorer {
+            constructor() {
+                this.baseUrl = '';
+                this.discoveredFiles = new Set();
+                this.discoveredFolders = new Set();
+                this.currentPath = '';
+                this.fileStructure = {};
+                
+                this.initEventListeners();
+            }
+
+            initEventListeners() {
+                document.getElementById('scanBtn').addEventListener('click', () => this.startScan());
+                document.getElementById('urlInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.startScan();
+                });
+            }
+
+            async startScan() {
+                const urlInput = document.getElementById('urlInput');
+                const url = urlInput.value.trim();
+                
+                if (!url) {
+                    alert('Please enter a valid URL');
+                    return;
+                }
+
+                this.baseUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+                this.showLoading();
+
+                try {
+                    await this.scanWebsite();
+                    this.displayResults();
+                } catch (error) {
+                    this.showError(`Error scanning website: ${error.message}`);
+                }
+            }
+
+            showLoading() {
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('loadingDiv').style.display = 'block';
+                document.getElementById('fileTree').style.display = 'none';
+                document.getElementById('fileContent').style.display = 'none';
+                document.getElementById('scanBtn').disabled = true;
+            }
+
+            async scanWebsite() {
+                // Common files to check
+                const commonFiles = [
+                    'robots.txt', 'sitemap.xml', 'sitemap.json',
+                    'index.html', 'index.php', 'index.js', 'index.css',
+                    'style.css', 'styles.css', 'main.css', 'app.css',
+                    'script.js', 'scripts.js', 'main.js', 'app.js',
+                    'config.json', 'package.json', 'composer.json',
+                    'README.md', 'README.txt', 'changelog.txt',
+                    '.htaccess', 'web.config', 'favicon.ico',
+                    'manifest.json', 'sw.js', 'service-worker.js'
+                ];
+
+                // Common directories to check
+                const commonDirs = [
+                    'css', 'js', 'javascript', 'scripts', 'styles',
+                    'images', 'img', 'assets', 'static', 'public',
+                    'uploads', 'files', 'downloads', 'media',
+                    'admin', 'api', 'includes', 'lib', 'libs',
+                    'vendor', 'node_modules', 'dist', 'build',
+                    'wp-content', 'wp-admin', 'wp-includes',
+                    'templates', 'views', 'pages', 'components'
+                ];
+
+                // Check for directory listing
+                await this.checkDirectoryListing('');
+
+                // Check common files
+                for (const file of commonFiles) {
+                    await this.checkFile(file);
+                }
+
+                // Check common directories
+                for (const dir of commonDirs) {
+                    await this.checkDirectory(dir);
+                }
+
+                // Try to parse robots.txt for additional paths
+                await this.parseRobotsTxt();
+
+                // Try to parse sitemap.xml for additional paths
+                await this.parseSitemap();
+
+                // Check for common framework structures
+                await this.checkFrameworkFiles();
+            }
+
+            async checkFile(path, isInDirectory = false) {
+                try {
+                    const fullUrl = `${this.baseUrl}/${path}`;
+                    const response = await fetch(fullUrl, { method: 'HEAD' });
+                    
+                    if (response.ok) {
+                        this.discoveredFiles.add(path);
+                        const pathParts = path.split('/');
+                        if (pathParts.length > 1) {
+                            const directory = pathParts.slice(0, -1).join('/');
+                            this.discoveredFolders.add(directory);
+                        }
+                    }
+                } catch (error) {
+                    // File doesn't exist or can't be accessed
+                }
+            }
+
+            async checkDirectory(path) {
+                try {
+                    const fullUrl = `${this.baseUrl}/${path}/`;
+                    const response = await fetch(fullUrl, { method: 'HEAD' });
+                    
+                    if (response.ok) {
+                        this.discoveredFolders.add(path);
+                        await this.checkDirectoryListing(path);
+                        
+                        // Check for common files in this directory
+                        const commonFiles = ['index.html', 'index.php', 'index.js', 'style.css', 'main.js'];
+                        for (const file of commonFiles) {
+                            await this.checkFile(`${path}/${file}`, true);
+                        }
+                    }
+                } catch (error) {
+                    // Directory doesn't exist or can't be accessed
+                }
+            }
+
+            async checkDirectoryListing(path) {
+                try {
+                    const fullUrl = path ? `${this.baseUrl}/${path}/` : `${this.baseUrl}/`;
+                    const response = await fetch(fullUrl);
+                    
+                    if (response.ok) {
+                        const html = await response.text();
+                        this.parseDirectoryListing(html, path);
+                    }
+                } catch (error) {
+                    // Can't access directory listing
+                }
+            }
+
+            parseDirectoryListing(html, basePath) {
+                // Look for common directory listing patterns
+                const linkRegex = /<a[^>]*href=["']([^"']+)["'][^>]*>([^<]+)<\/a>/gi;
+                let match;
+
+                while ((match = linkRegex.exec(html)) !== null) {
+                    let href = match[1];
+                    let text = match[2].trim();
+
+                    // Skip navigation links
+                    if (href === '../' || href === '/' || href.startsWith('http') || href.startsWith('mailto:')) {
+                        continue;
+                    }
+
+                    // Clean up the path
+                    href = href.replace(/^\.\//, '');
+                    const fullPath = basePath ? `${basePath}/${href}` : href;
+
+                    if (href.endsWith('/')) {
+                        // It's a directory
+                        const dirPath = fullPath.slice(0, -1);
+                        this.discoveredFolders.add(dirPath);
+                    } else {
+                        // It's a file
+                        this.discoveredFiles.add(fullPath);
+                    }
+                }
+            }
+
+            async parseRobotsTxt() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/robots.txt`);
+                    if (response.ok) {
+                        const text = await response.text();
+                        const lines = text.split('\n');
+                        
+                        for (const line of lines) {
+                            const disallowMatch = line.match(/Disallow:\s*(.+)/i);
+                            const allowMatch = line.match(/Allow:\s*(.+)/i);
+                            
+                            if (disallowMatch || allowMatch) {
+                                const path = (disallowMatch || allowMatch)[1].trim();
+                                if (path && path !== '/' && !path.startsWith('http')) {
+                                    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+                                    if (cleanPath.includes('.')) {
+                                        this.discoveredFiles.add(cleanPath);
+                                    } else {
+                                        this.discoveredFolders.add(cleanPath);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (error) {
+                    // robots.txt not accessible
+                }
+            }
+
+            async parseSitemap() {
+                const sitemapUrls = ['sitemap.xml', 'sitemap_index.xml', 'sitemap.json'];
+                
+                for (const sitemapUrl of sitemapUrls) {
+                    try {
+                        const response = await fetch(`${this.baseUrl}/${sitemapUrl}`);
+                        if (response.ok) {
+                            const text = await response.text();
+                            
+                            if (sitemapUrl.endsWith('.json')) {
+                                // Parse JSON sitemap
+                                try {
+                                    const json = JSON.parse(text);
+                                    if (json.urls) {
+                                        json.urls.forEach(item => {
+                                            if (item.url) {
+                                                const path = item.url.replace(this.baseUrl, '').replace(/^\//, '');
+                                                if (path) this.discoveredFiles.add(path);
+                                            }
+                                        });
+                                    }
+                                } catch (e) {}
+                            } else {
+                                // Parse XML sitemap
+                                const urlMatches = text.match(/<loc>(.*?)<\/loc>/g);
+                                if (urlMatches) {
+                                    urlMatches.forEach(match => {
+                                        const url = match.replace(/<\/?loc>/g, '');
+                                        const path = url.replace(this.baseUrl, '').replace(/^\//, '');
+                                        if (path && !path.startsWith('http')) {
+                                            this.discoveredFiles.add(path);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        // Sitemap not accessible
+                    }
+                }
+            }
+
+            async checkFrameworkFiles() {
+                // WordPress
+                const wpFiles = ['wp-config.php', 'wp-login.php', 'xmlrpc.php'];
+                for (const file of wpFiles) {
+                    await this.checkFile(file);
+                }
+
+                // Laravel
+                await this.checkDirectory('storage');
+                await this.checkDirectory('bootstrap');
+
+                // React/Vue build files
+                await this.checkDirectory('build');
+                await this.checkDirectory('dist');
+
+                // Common config files
+                const configFiles = ['.env', 'config.php', 'settings.json', 'app.config'];
+                for (const file of configFiles) {
+                    await this.checkFile(file);
+                }
+            }
+
+            displayResults() {
+                document.getElementById('loadingDiv').style.display = 'none';
+                document.getElementById('fileTree').style.display = 'block';
+                document.getElementById('scanBtn').disabled = false;
+
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+
+                if (this.discoveredFiles.size === 0 && this.discoveredFolders.size === 0) {
+                    fileList.innerHTML = '<div class="error">No files or directories discovered. The website may have strict access controls.</div>';
+                    return;
+                }
+
+                // Display folders first
+                const sortedFolders = Array.from(this.discoveredFolders).sort();
+                sortedFolders.forEach(folder => {
+                    const item = document.createElement('div');
+                    item.className = 'file-item folder';
+                    item.innerHTML = `<span class="icon">📁</span>${folder}/`;
+                    item.onclick = () => this.exploreFolder(folder);
+                    fileList.appendChild(item);
+                });
+
+                // Display files
+                const sortedFiles = Array.from(this.discoveredFiles).sort();
+                sortedFiles.forEach(file => {
+                    const item = document.createElement('div');
+                    item.className = 'file-item';
+                    const icon = this.getFileIcon(file);
+                    item.innerHTML = `<span class="icon">${icon}</span>${file}`;
+                    item.onclick = () => this.viewFile(file);
+                    fileList.appendChild(item);
+                });
+            }
+
+            getFileIcon(filename) {
+                const ext = filename.split('.').pop().toLowerCase();
+                const iconMap = {
+                    'html': '🌐', 'css': '🎨', 'js': '⚡', 'json': '📋',
+                    'php': '🐘', 'py': '🐍', 'txt': '📄', 'md': '📝',
+                    'xml': '📰', 'jpg': '🖼️', 'png': '🖼️', 'gif': '🖼️',
+                    'pdf': '📕', 'zip': '📦', 'ico': '🎯'
+                };
+                return iconMap[ext] || '📄';
+            }
+
+            async viewFile(filename) {
+                try {
+                    const response = await fetch(`${this.baseUrl}/${filename}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        
+                        document.getElementById('fileContent').style.display = 'block';
+                        document.getElementById('fileTitle').textContent = `📄 ${filename}`;
+                        document.getElementById('fileCode').textContent = content;
+                        
+                        // Scroll to file content
+                        document.getElementById('fileContent').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        this.showError(`Could not read file: ${filename}`);
+                    }
+                } catch (error) {
+                    this.showError(`Error reading file: ${error.message}`);
+                }
+            }
+
+            async exploreFolder(folderPath) {
+                // This would expand the folder view - for now just show a message
+                alert(`Exploring folder: ${folderPath}\n\nThis would show files within the folder in a full implementation.`);
+            }
+
+            showError(message) {
+                document.getElementById('loadingDiv').style.display = 'none';
+                document.getElementById('fileTree').style.display = 'block';
+                document.getElementById('scanBtn').disabled = false;
+                
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = `<div class="error">${message}</div>`;
+            }
+        }
+
+        // Initialize the explorer when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new WebsiteExplorer();
+        });
+    </script>
+</body>
+</html>
